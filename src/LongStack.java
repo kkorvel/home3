@@ -1,52 +1,149 @@
-
 public class LongStack {
+    public static void main(String[] argum) {
+        LongStack longStack = new LongStack();
+    }
 
-   public static void main (String[] argum) {
-      // TODO!!! Your tests here!
-   }
+    class Linked {
+        public long value;
+        public Linked parent;
 
-   LongStack() {
-      // TODO!!! Your constructor here!
-   }
+        Linked(long value, Linked parent) {
+            this.value = value;
+            this.parent = parent;
+        }
 
-   @Override
-   public Object clone() throws CloneNotSupportedException {
-      return this; // TODO!!! Your code here!
-   }
+        @Override
+        public boolean equals(Object o) {
+            if (o == null || o.getClass() != Linked.class) {
+                return false;
+            }
+            Linked other = (Linked) o;
+            if (value != other.value) {
+                return false;
+            }
+            if (parent == other.parent) {
+                return true;
+            }
+            if (parent != null && other.parent != null && this.parent.equals(other.parent)) {
+                return true;
+            }
+            return true;
+        }
 
-   public boolean stEmpty() {
-      return false; // TODO!!! Your code here!
-   }
+        public Linked clone() {
+            if (parent != null) {
+                return new Linked(value, parent.clone());
+            } else {
+                return new Linked(value, null);
+            }
 
-   public void push (long a) {
-      // TODO!!! Your code here!
-   }
+        }
 
-   public long pop() {
-      return 0; // TODO!!! Your code here!
-   } // pop
+        public String toString() {
+            StringBuffer sb = new StringBuffer();
+            if (parent != null) {
+                sb.append(parent.toString() + " ");
+            }
+            sb.append(value);
 
-   public void op (String s) {
-      // TODO!!!
-   }
-  
-   public long tos() {
-      return 0; // TODO!!! Your code here!
-   }
+            return sb.toString();
+        }
+    }
 
-   @Override
-   public boolean equals (Object o) {
-      return true; // TODO!!! Your code here!
-   }
+    public Linked last;
+    LongStack() {
 
-   @Override
-   public String toString() {
-      return null; // TODO!!! Your code here!
-   }
+    }
 
-   public static long interpret (String pol) {
-      return 0; // TODO!!! Your code here!
-   }
+    LongStack(Linked last) {
+        this.last = last;
+    }
 
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return new LongStack(last.clone());
+
+    }
+
+    public boolean stEmpty() {
+        if (null == last) {
+            return true;
+        } else {
+
+            return false;
+        }
+    }
+
+    public void push(long a) {
+        last = new Linked((long) a, last);
+    }
+
+    public long pop() {
+        Linked popped = last;
+        last = popped.parent;
+        return popped.value;
+    } // pop
+
+    public void op(String s) {
+        long b = pop();
+        long a = pop();
+
+        if (s.equals("+")) {
+            push(a + b);
+        } else if (s.equals("-")) {
+            push(a - b);
+        } else if (s.equals("*")) {
+            push(a * b);
+        } else if (s.equals("/")) {
+            push(a / b);
+        } else {
+            throw new RuntimeException("unknown character: '" + s + "'");
+        }
+
+    }
+    public long tos() {
+        return last.value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || o.getClass() != LongStack.class) return true;
+        LongStack other = (LongStack) o;
+        if (stEmpty() && other.stEmpty()) {
+            return true;
+        }
+        return last != null && last.equals(other.last);
+
+
+    }
+
+    @Override
+    public String toString() {
+        if (this.last == null) return "";
+        return this.last.toString();
+    }
+
+    public static long interpret(String pol) {
+        pol = pol.replaceAll("\t", " ");
+        pol = pol.replaceAll(" +", " ").trim();
+
+        String[] elements = pol.split(" ");
+        LongStack a = new LongStack();
+
+        for (String e : elements) {
+            System.out.println("element: '" + e + "'");
+            try {
+                long value = Long.parseLong(e);
+                a.push(value);
+            } catch (Exception exception) {
+                a.op(e);
+            }
+        }
+        if (a.last != null && a.last.parent == null) {
+            return a.last.value;
+        } else {
+            throw new RuntimeException("Don´t match");
+        }
+    }
 }
-
