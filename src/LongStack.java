@@ -132,7 +132,7 @@ public class LongStack {
         LongStack a = new LongStack();
 
         for (String e : elements) {
-            System.out.println("element: '" + e + "'");
+            //System.out.println("element: '" + e + "'");
             try {
                 long value = Long.parseLong(e);
                 a.push(value);
@@ -143,7 +143,7 @@ public class LongStack {
         if (a.last != null && a.last.parent == null) {
             return a.last.value;
         } else {
-            throw new RuntimeException("Don´t match");
+            throw new RuntimeException("Unbalanced polish notation");
         }
     }
 }
