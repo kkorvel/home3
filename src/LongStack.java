@@ -103,7 +103,14 @@ public class LongStack {
 
     }
     public long tos() {
+        if (this.last != null )
+        {
         return last.value;
+
+        }else {
+            throw  new RuntimeException("Empty!");
+        }
+
     }
 
     @Override
