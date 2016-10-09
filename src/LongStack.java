@@ -106,7 +106,6 @@ public class LongStack {
         if (this.last != null )
         {
         return last.value;
-
         }else {
             throw  new RuntimeException("Empty!");
         }
@@ -132,6 +131,9 @@ public class LongStack {
     }
 
     public static long interpret(String pol) {
+        if (pol.isEmpty() || pol == null) {
+            throw new RuntimeException("Empty expression");
+        }
         pol = pol.replaceAll("\t", " ");
         pol = pol.replaceAll(" +", " ").trim();
 
