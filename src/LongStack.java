@@ -50,7 +50,7 @@ public class LongStack {
         }
     }
 
-    public Linked last;
+    private Linked last;
     LongStack() {
 
     }
@@ -80,12 +80,18 @@ public class LongStack {
     }
 
     public long pop() {
+        if (this.last == null){
+            throw new RuntimeException("Empty magasin!");
+        }
         Linked popped = last;
         last = popped.parent;
         return popped.value;
     } // pop
 
     public void op(String s) {
+        if (this.last == null){
+            throw new RuntimeException("Empty magasin!");
+        }
         long b = pop();
         long a = pop();
 
@@ -107,7 +113,7 @@ public class LongStack {
         {
         return last.value;
         }else {
-            throw  new RuntimeException("Empty!");
+            throw  new RuntimeException("Empty magasin!");
         }
 
     }
