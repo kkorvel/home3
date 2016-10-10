@@ -158,7 +158,8 @@ public class LongStack {
         if (a.last != null && a.last.parent == null) {
             return a.last.value;
         } else {
-            throw new RuntimeException("Unbalanced polish notation");
+            throw new RuntimeException("Avaldis " + pol + "on ebakorrektne, sest " + a.last);
+
         }
     }
 }
