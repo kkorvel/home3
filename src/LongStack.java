@@ -1,6 +1,7 @@
 public class LongStack {
     public static void main(String[] argum) {
         LongStack longStack = new LongStack();
+        System.out.println (interpret("2 -"));
     }
 
     class Linked {
@@ -86,13 +87,16 @@ public class LongStack {
         Linked popped = last;
         last = popped.parent;
         return popped.value;
-    } // pop
+    }
 
     public void op(String s) {
         if (this.last == null){
             throw new RuntimeException("Empty magasin!");
         }
         long b = pop();
+        if (this.last == null) {
+            throw new RuntimeException("Empty magasin!");
+        }
         long a = pop();
 
         if (s.equals("+")) {
@@ -104,7 +108,7 @@ public class LongStack {
         } else if (s.equals("/")) {
             push(a / b);
         } else {
-            throw new RuntimeException("unknown character: '" + s + "'");
+            throw new RuntimeException("Unknown character: '" + s + "'");
         }
 
     }
@@ -120,7 +124,8 @@ public class LongStack {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || o.getClass() != LongStack.class) return true;
+        if (o == null || o.getClass() != LongStack.class)
+            return true;
         LongStack other = (LongStack) o;
         if (stEmpty() && other.stEmpty()) {
             return true;
@@ -137,8 +142,8 @@ public class LongStack {
     }
 
     public static long interpret(String pol) {
-        if (pol.isEmpty() || pol == null) {
-            throw new RuntimeException("Empty expression");
+        if (pol.trim().isEmpty() || pol == null) {
+            throw new RuntimeException("Invalid expression: empty");
         }
         pol = pol.replaceAll("\t", " ");
         pol = pol.replaceAll(" +", " ").trim();
@@ -152,13 +157,17 @@ public class LongStack {
                 long value = Long.parseLong(e);
                 a.push(value);
             } catch (Exception exception) {
-                a.op(e);
+                try {
+                    a.op(e);
+                }catch (RuntimeException s){
+                    throw new RuntimeException("Vigane avaldis: kohal " + pol);
+                }
             }
         }
         if (a.last != null && a.last.parent == null) {
             return a.last.value;
         } else {
-            throw new RuntimeException("Avaldis " + pol + "on ebakorrektne, sest " + a.last);
+            throw new RuntimeException("Avaldis " + pol + "on ebakorrektne");
 
         }
     }
